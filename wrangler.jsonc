@@ -1,0 +1,9 @@
+{
+    "$schema": "https://unpkg.com/wrangler/config-schema.json",
+    "name": "violet-visual",
+    "compatibility_date": "2026-09-08",
+    "assets": {
+        "directory": "./dist/",
+        "html_handling": "auto-trailing-slash"
+    }
+}
