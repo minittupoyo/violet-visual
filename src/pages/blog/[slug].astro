@@ -2,6 +2,7 @@
 import { render } from "astro:content";
 import { getPosts } from "@/lib/posts";
 import Layout from "@/layouts/Layout.astro";
+import ToC from "@/components/ToC.astro";
 
 export async function getStaticPaths() {
     const posts = await getPosts();
@@ -12,18 +13,15 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 ---
 
 <Layout>
     <div class="mx-auto max-w-5xl px-6">
         <article>
             <header class="py-6 pb-8 space-y-2 border-b border-zinc-200">
-                <a
-                    href="javascript:history.back()"
-                    class="text-blue-600 hover:underline"
-                >
-                    &larr; 戻る
+                <a href="/blog" class="text-blue-600 hover:underline">
+                    &larr; 一覧へ戻る
                 </a>
                 <p class="text-blue-600 font-mono mt-6">
                     {entry.data.date.toLocaleDateString("ja-JP")}
@@ -33,8 +31,17 @@ const { Content } = await render(entry);
                 </h1>
                 <p class="text-lg text-zinc-600">{entry.data.description}</p>
             </header>
-            <div class="prose prose-blue prose-img:rounded-lg max-w-none py-8">
-                <Content />
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 w-full py-8">
+                <div
+                    class="order-1 md:col-span-3 prose prose-blue prose-img:rounded-lg max-w-none [&_iframe]:w-full [&_iframe]:max-w-full [&_iframe]:aspect-video [&_iframe]:rounded-lg"
+                >
+                    <Content />
+                </div>
+                <div class="order-2 hidden md:block">
+                    <div class="sticky top-24">
+                        <ToC headings={headings} />
+                    </div>
+                </div>
             </div>
         </article>
     </div>

@@ -10,7 +10,7 @@ const { hideHeader } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang="ja" class="scroll-smooth scroll-pt-24">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
@@ -19,7 +19,7 @@ const { hideHeader } = Astro.props;
         <meta name="generator" content={Astro.generator} />
         <title>Astro Basics</title>
     </head>
-    <body class="min-h-svh flex flex-col">
+    <body class="min-h-svh flex flex-col font-sans antialiased">
         {!hideHeader && <Header />}
         <main class="flex-1">
             <slot />

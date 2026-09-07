@@ -16,7 +16,11 @@
                     "command": "prettier",
                     "arguments": ["--stdin-filepath", "{buffer_path}"]
                 }
-            }
+            },
+            "language_servers": [
+                "tailwindcss-intellisense-css",
+                "!vscode-css-language-server"
+            ]
         },
         "TypeScript": {
             "formatter": {

@@ -1,0 +1,40 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+    headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const styleMap: Record<number, string> = {
+    2: "text-sm font-medium",
+    3: "text-xs",
+};
+
+const indentMap: Record<number, string> = {
+    2: "pl-0",
+    3: "pl-2",
+};
+---
+
+{
+    filteredHeadings.length > 0 && (
+        <nav>
+            <p class="text-lg font-bold">目次</p>
+            <ul class="space-y-2 mt-4">
+                {filteredHeadings.map((h) => (
+                    <li class={`${indentMap[h.depth]}`}>
+                        <a
+                            href={`#${h.slug}`}
+                            class={`${styleMap[h.depth]} hover:text-blue-600`}
+                        >
+                            {h.text}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    )
+}

@@ -20,9 +20,9 @@ export default config({
             schema: {
                 title: fields.slug({ name: { label: "タイトル" } }),
                 description: fields.text({ label: "説明", multiline: false }),
-                date: fields.date({
+                date: fields.datetime({
                     label: "日時",
-                    defaultValue: { kind: "today" },
+                    defaultValue: { kind: "now" },
                 }),
                 tags: fields.array(fields.text({ label: "タグ" }), {
                     label: "タグ",
@@ -37,8 +37,8 @@ export default config({
                     extension: "md",
                     options: {
                         image: {
-                            directory: "content/blog",
-                            publicPath: "../",
+                            directory: "content/assets/images/blog",
+                            publicPath: "../../assets/images/blog/",
                             transformFilename(filename) {
                                 const ext = filename.split(".").pop();
                                 const random = crypto
