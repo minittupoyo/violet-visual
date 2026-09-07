@@ -1,0 +1,133 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const likes = [
+    {
+        label: "Music",
+        value: "*Luna / Aqu3ra / VOCALOID",
+    },
+    {
+        label: "Anime / Manga",
+        value: "百合とか。",
+    },
+    {
+        label: "Games",
+        value: "美少女ゲーム / ノベルゲーム",
+    },
+    {
+        label: "Computer",
+        value: "Linux / 自作PC / Web / AI",
+    },
+];
+
+const links = [
+    {
+        label: "GitHub",
+        value: "minittupoyo",
+        href: "https://github.com/minittupoyo",
+    },
+    {
+        label: "ListenBrainz",
+        value: "minittupoyo",
+        href: "https://listenbrainz.org/user/minittupoyo/",
+    },
+];
+---
+
+<Layout
+    title="About"
+    description="みにっつと、このブログについて。Web、Linux、自作PC、AI、音楽、ゲームなど、好きなものや書いていることをまとめています。"
+>
+    <div class="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+        <header class="border-b border-zinc-200 pb-10 sm:pb-14">
+            <p class="font-mono text-sm text-zinc-500">About</p>
+            <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+                みにっつ / minittupoyo
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-zinc-600">
+                18歳のニートです。ちょっとだけプログラミングができます。
+                Webサイトやデスクトップアプリを作ったり、Linuxをいじったり、
+                自作PCを触ったりしています。
+            </p>
+        </header>
+
+        <section class="grid gap-6 border-b border-zinc-200 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-zinc-500">Me</h2>
+            <div class="max-w-2xl space-y-5 text-base leading-8 text-zinc-700">
+                <p>
+                    AstroやVue、Tauriあたりを触ることが多いです。
+                    最近はAIにコードを書かせることも多め。
+                </p>
+                <p>
+                    プログラミング以外だと、音楽を聴いたり、アニメを見たり、
+                    美少女ゲームをやったりしています。
+                </p>
+            </div>
+        </section>
+
+        <section class="grid gap-6 border-b border-zinc-200 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-zinc-500">
+                This blog
+            </h2>
+            <div class="max-w-2xl space-y-5 text-base leading-8 text-zinc-700">
+                <p class="text-xl font-semibold tracking-tight text-zinc-950">
+                    技術ブログというより、個人ブログ。
+                </p>
+                <p>
+                    自分が試したこと、ハマったこと、あとで忘れそうな設定や、
+                    その時々で考えたことを残しています。
+                </p>
+                <p>
+                    ちゃんとした解説記事を書くこともあれば、
+                    「これで動いた」くらいの記事もあります。
+                    LinuxやWeb、AI、自作PCの話が多めですが、
+                    音楽やゲーム、買ったもの、その時に考えたことも書きます。
+                </p>
+            </div>
+        </section>
+
+        <section class="grid gap-6 border-b border-zinc-200 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-zinc-500">Likes</h2>
+            <dl class="max-w-2xl divide-y divide-zinc-200">
+                {
+                    likes.map((item) => (
+                        <div class="grid gap-1 py-4 first:pt-0 last:pb-0 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+                            <dt class="font-medium text-zinc-950">
+                                {item.label}
+                            </dt>
+                            <dd class="text-zinc-600">{item.value}</dd>
+                        </div>
+                    ))
+                }
+            </dl>
+        </section>
+
+        <section class="grid gap-6 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-zinc-500">Links</h2>
+            <ul class="max-w-2xl divide-y divide-zinc-200">
+                {
+                    links.map((link) => (
+                        <li>
+                            <a
+                                href={link.href}
+                                target="_blank"
+                                rel="noreferrer"
+                                class="group flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                            >
+                                <span class="font-medium text-zinc-950">
+                                    {link.label}
+                                </span>
+                                <span class="font-mono text-sm text-zinc-500">
+                                    {link.value}
+                                </span>
+                                <span class="ml-auto text-blue-600 transition group-hover:translate-x-0.5">
+                                    &rarr;
+                                </span>
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </section>
+    </div>
+</Layout>
