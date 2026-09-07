@@ -10,7 +10,7 @@ import { satteriBreaks } from "@minittupoyo/satteri-breaks";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://blog.minittu.net",
+    site: "https://xn--j9jct3f.jp",
     vite: {
         plugins: [tailwindcss()],
     },
