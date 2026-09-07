@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getPosts } from "@/lib/posts";
+import ListenBrainzRecent from "@/components/ListenBrainzRecent.astro";
 
 const posts = await getPosts();
 ---
@@ -67,5 +68,6 @@ const posts = await getPosts();
                 </span>
             </a>
         </section>
+        <ListenBrainzRecent username="minittupoyo" count={5} />
     </div>
 </Layout>
