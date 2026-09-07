@@ -8,6 +8,8 @@ import keystatic from "@keystatic/astro";
 import { satteri } from "@astrojs/markdown-satteri";
 import { satteriBreaks } from "@minittupoyo/satteri-breaks";
 
+import expressiveCode from "astro-expressive-code";
+
 // https://astro.build/config
 export default defineConfig({
     site: "https://xn--j9jct3f.jp",
@@ -19,6 +21,12 @@ export default defineConfig({
         icon(),
         react(),
         ...(import.meta.env.PROD ? [] : [keystatic()]),
+        expressiveCode({
+            themes: ["dracula", "catppuccin-latte"],
+            styleOverrides: {
+                codeFontFamily: "'JetBrains Mono', monospace",
+            },
+        }),
     ],
     markdown: {
         processor: satteri({
