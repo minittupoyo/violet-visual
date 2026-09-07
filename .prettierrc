@@ -1,0 +1,14 @@
+{
+    "$schema": "https://www.schemastore.org/prettierrc.json",
+    "tabWidth": 4,
+    "htmlWhitespaceSensitivity": "ignore",
+    "plugins": ["prettier-plugin-astro"],
+    "overrides": [
+        {
+            "files": "*.astro",
+            "options": {
+                "parser": "astro"
+            }
+        }
+    ]
+}
