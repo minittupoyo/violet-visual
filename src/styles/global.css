@@ -7,4 +7,5 @@
 @theme {
     --font-sans: "Inter Variable", "Noto Sans JP Variable", sans-serif;
     --font-mono: "JetBrains Mono Variable", monospace;
+    --default-mono-font-family: var(--font-mono);
 }
