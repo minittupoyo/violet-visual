@@ -1,0 +1,442 @@
+---
+interface Props {
+    username: string;
+    count?: number;
+}
+
+const { username, count = 5 } = Astro.props;
+const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)}/`;
+---
+
+<section
+    class="py-8 space-y-4"
+    data-listenbrainz
+    data-username={username}
+    data-count={count}
+>
+    <div class="flex items-end justify-between gap-4">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-bold">Listening</h2>
+            <p class="mt-2 text-lg text-zinc-600 tracking-tight">
+                最近聴いた曲です。
+            </p>
+        </div>
+        <a
+            href={profileUrl}
+            target="_blank"
+            rel="noreferrer"
+            class="hidden text-sm text-blue-600 hover:underline sm:inline"
+        >
+            ListenBrainz
+        </a>
+    </div>
+
+    <div
+        class="hidden rounded-xl border border-blue-200 bg-blue-50/60 p-4"
+        data-listenbrainz-now-playing
+        aria-live="polite"
+    >
+        <div class="mb-3 flex items-center gap-2 text-xs font-medium text-blue-700">
+            <span class="relative flex size-2" aria-hidden="true">
+                <span class="absolute inline-flex size-full animate-ping rounded-full bg-blue-500 opacity-60"></span>
+                <span class="relative inline-flex size-2 rounded-full bg-blue-600"></span>
+            </span>
+            Now Playing
+        </div>
+        <div class="flex items-center gap-4" data-listenbrainz-now-playing-track></div>
+    </div>
+
+    <p
+        class="text-sm text-zinc-500"
+        data-listenbrainz-status
+        aria-live="polite"
+    >
+        ListenBrainz から取得中...
+    </p>
+
+    <ol
+        class="hidden divide-y divide-zinc-200 border-y border-zinc-200"
+        data-listenbrainz-list
+        aria-label="最近聴いた曲"
+    ></ol>
+</section>
+
+<script>
+    interface ListenBrainzMbidMapping {
+        caa_id?: number;
+        caa_release_mbid?: string;
+    }
+
+    interface ListenBrainzAdditionalInfo {
+        release_mbid?: string;
+        release_group_mbid?: string;
+    }
+
+    interface ListenBrainzTrackMetadata {
+        artist_name?: string;
+        track_name?: string;
+        release_name?: string;
+        mbid_mapping?: ListenBrainzMbidMapping;
+        additional_info?: ListenBrainzAdditionalInfo;
+    }
+
+    interface ListenBrainzListen {
+        listened_at?: number;
+        track_metadata?: ListenBrainzTrackMetadata;
+    }
+
+    interface ListenBrainzResponse {
+        payload?: {
+            listens?: ListenBrainzListen[];
+            playing_now?: boolean;
+        };
+    }
+
+    interface CoverArtResponse {
+        cover_art_url?: string | null;
+    }
+
+    const POLL_INTERVAL = 15_000;
+    const coverArtCache = new Map<string, Promise<string | null>>();
+
+    const formatListenedAt = (timestamp?: number) => {
+        if (!timestamp) return "再生時刻不明";
+
+        return new Intl.DateTimeFormat("ja-JP", {
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }).format(new Date(timestamp * 1000));
+    };
+
+    const getTrackKey = (metadata: ListenBrainzTrackMetadata) =>
+        [metadata.artist_name, metadata.track_name, metadata.release_name]
+            .map((value) => value?.trim().toLocaleLowerCase() ?? "")
+            .join("\u0000");
+
+    const getCoverArtUrls = (metadata: ListenBrainzTrackMetadata) => {
+        const urls: string[] = [];
+        const mapping = metadata.mbid_mapping;
+        const additionalInfo = metadata.additional_info;
+
+        if (mapping?.caa_id && mapping.caa_release_mbid) {
+            urls.push(
+                `https://coverartarchive.org/release/${encodeURIComponent(mapping.caa_release_mbid)}/${encodeURIComponent(String(mapping.caa_id))}-250.jpg`,
+            );
+        }
+
+        if (additionalInfo?.release_mbid) {
+            urls.push(
+                `https://coverartarchive.org/release/${encodeURIComponent(additionalInfo.release_mbid)}/front-250.jpg`,
+            );
+        }
+
+        if (additionalInfo?.release_group_mbid) {
+            urls.push(
+                `https://coverartarchive.org/release-group/${encodeURIComponent(additionalInfo.release_group_mbid)}/front-250.jpg`,
+            );
+        }
+
+        return [...new Set(urls)];
+    };
+
+    const createCover = (
+        metadata: ListenBrainzTrackMetadata,
+        sizeClass: string,
+        extraUrls: string[] = [],
+    ) => {
+        const cover = document.createElement("div");
+        cover.className = `flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 text-zinc-400`;
+
+        const coverUrls = [
+            ...new Set([...getCoverArtUrls(metadata), ...extraUrls]),
+        ];
+
+        if (coverUrls.length > 0) {
+            const image = document.createElement("img");
+            image.alt = metadata.release_name
+                ? `${metadata.release_name} のジャケット`
+                : "アルバムジャケット";
+            image.className = "size-full object-cover";
+            image.loading = "lazy";
+            image.decoding = "async";
+
+            let coverIndex = 0;
+            image.src = coverUrls[coverIndex];
+
+            image.addEventListener("error", () => {
+                coverIndex += 1;
+                const fallbackUrl = coverUrls[coverIndex];
+
+                if (fallbackUrl) image.src = fallbackUrl;
+                else image.remove();
+            });
+
+            cover.append(image);
+        }
+
+        return cover;
+    };
+
+    const resolveCoverArt = (metadata: ListenBrainzTrackMetadata) => {
+        if (
+            getCoverArtUrls(metadata).length > 0 ||
+            !metadata.artist_name ||
+            !metadata.track_name
+        ) {
+            return Promise.resolve(null);
+        }
+
+        const key = getTrackKey(metadata);
+        const cached = coverArtCache.get(key);
+        if (cached) return cached;
+
+        const request = (async () => {
+            const params = new URLSearchParams({
+                artist_name: metadata.artist_name!,
+                recording_name: metadata.track_name!,
+            });
+
+            if (metadata.release_name) {
+                params.set("release_name", metadata.release_name);
+            }
+
+            try {
+                const response = await fetch(
+                    `/api/listenbrainz/cover-art?${params}`,
+                );
+                if (!response.ok) return null;
+
+                const data = (await response.json()) as CoverArtResponse;
+                return data.cover_art_url ?? null;
+            } catch (error) {
+                console.error(
+                    "Failed to resolve ListenBrainz cover art",
+                    error,
+                );
+                return null;
+            }
+        })();
+
+        coverArtCache.set(key, request);
+        return request;
+    };
+
+    const createTrackText = (
+        metadata: ListenBrainzTrackMetadata,
+        titleClass = "truncate text-sm font-medium text-zinc-900",
+    ) => {
+        const track = document.createElement("div");
+        track.className = "min-w-0 flex-1";
+
+        const title = document.createElement("p");
+        title.className = titleClass;
+        title.textContent = metadata.track_name || "曲名不明";
+
+        const details = document.createElement("p");
+        details.className = "mt-1 truncate text-xs text-zinc-500";
+        details.textContent =
+            [metadata.artist_name, metadata.release_name]
+                .filter(Boolean)
+                .join(" · ") || "アーティスト不明";
+
+        track.append(title, details);
+        return track;
+    };
+
+    const renderListen = (listen: ListenBrainzListen) => {
+        const metadata = listen.track_metadata ?? {};
+        const item = document.createElement("li");
+        item.className = "flex items-center gap-4 py-4";
+
+        const listenedAt = document.createElement("time");
+        listenedAt.className =
+            "ml-auto shrink-0 text-xs text-zinc-400 tabular-nums";
+        listenedAt.textContent = formatListenedAt(listen.listened_at);
+
+        if (listen.listened_at) {
+            listenedAt.dateTime = new Date(
+                listen.listened_at * 1000,
+            ).toISOString();
+        }
+
+        item.append(
+            createCover(metadata, "size-14"),
+            createTrackText(metadata),
+            listenedAt,
+        );
+
+        return item;
+    };
+
+    const loadRecentListens = async (section: HTMLElement) => {
+        const username = section.dataset.username;
+        const count = Number(section.dataset.count ?? "5");
+        const status = section.querySelector<HTMLElement>(
+            "[data-listenbrainz-status]",
+        );
+        const list = section.querySelector<HTMLOListElement>(
+            "[data-listenbrainz-list]",
+        );
+
+        if (!username || !status || !list) return;
+
+        try {
+            const params = new URLSearchParams({
+                username,
+                count: String(count),
+            });
+
+            const response = await fetch(
+                `/api/listenbrainz/recent?${params}`,
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `ListenBrainz recent API returned ${response.status}`,
+                );
+            }
+
+            const data = (await response.json()) as ListenBrainzResponse;
+            const listens = data.payload?.listens ?? [];
+
+            if (listens.length === 0) {
+                status.textContent = "最近の再生履歴はありません。";
+                return;
+            }
+
+            list.replaceChildren(...listens.map(renderListen));
+            list.classList.remove("hidden");
+            status.classList.add("hidden");
+        } catch (error) {
+            console.error("Failed to load ListenBrainz listens", error);
+            status.textContent = "再生履歴を取得できませんでした。";
+        }
+    };
+
+    document
+        .querySelectorAll<HTMLElement>("[data-listenbrainz]")
+        .forEach((section) => {
+            const username = section.dataset.username;
+            const nowPlaying = section.querySelector<HTMLElement>(
+                "[data-listenbrainz-now-playing]",
+            );
+            const trackContainer = section.querySelector<HTMLElement>(
+                "[data-listenbrainz-now-playing-track]",
+            );
+
+            if (!username || !nowPlaying || !trackContainer) return;
+
+            let previousTrackKey: string | null = null;
+            let initialized = false;
+            let inFlight = false;
+            let timer: number | undefined;
+
+            const scheduleNext = () => {
+                window.clearTimeout(timer);
+
+                if (document.visibilityState === "visible") {
+                    timer = window.setTimeout(loadNowPlaying, POLL_INTERVAL);
+                }
+            };
+
+            const loadNowPlaying = async () => {
+                if (inFlight || document.visibilityState !== "visible") {
+                    return;
+                }
+
+                inFlight = true;
+
+                try {
+                    const params = new URLSearchParams({ username });
+                    const response = await fetch(
+                        `/api/listenbrainz/playing-now?${params}`,
+                        { cache: "no-cache" },
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(
+                            `ListenBrainz playing-now API returned ${response.status}`,
+                        );
+                    }
+
+                    const data =
+                        (await response.json()) as ListenBrainzResponse;
+                    const listen = data.payload?.playing_now
+                        ? data.payload.listens?.[0]
+                        : undefined;
+
+                    if (!listen) {
+                        const hadTrack = previousTrackKey !== null;
+                        previousTrackKey = null;
+                        nowPlaying.classList.add("hidden");
+
+                        if (hadTrack) {
+                            trackContainer.replaceChildren();
+                            void loadRecentListens(section);
+                        }
+
+                        initialized = true;
+                        return;
+                    }
+
+                    const metadata = listen.track_metadata ?? {};
+                    const trackKey = getTrackKey(metadata);
+
+                    if (initialized && trackKey === previousTrackKey) return;
+
+                    const hadPreviousTrack = previousTrackKey !== null;
+                    previousTrackKey = trackKey;
+
+                    const resolvedCover = await resolveCoverArt(metadata);
+
+                    trackContainer.replaceChildren(
+                        createCover(
+                            metadata,
+                            "size-16 sm:size-20",
+                            resolvedCover ? [resolvedCover] : [],
+                        ),
+                        createTrackText(
+                            metadata,
+                            "truncate text-base font-semibold text-zinc-950 sm:text-lg",
+                        ),
+                    );
+
+                    nowPlaying.classList.remove("hidden");
+
+                    if (initialized && hadPreviousTrack) {
+                        void loadRecentListens(section);
+                    }
+
+                    initialized = true;
+                } catch (error) {
+                    console.error(
+                        "Failed to load ListenBrainz now playing",
+                        error,
+                    );
+                } finally {
+                    inFlight = false;
+                    scheduleNext();
+                }
+            };
+
+            const handleVisibilityChange = () => {
+                window.clearTimeout(timer);
+
+                if (document.visibilityState === "visible") {
+                    void loadNowPlaying();
+                }
+            };
+
+            document.addEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+
+            void Promise.all([
+                loadNowPlaying(),
+                loadRecentListens(section),
+            ]);
+        });
+</script>
