@@ -24,17 +24,23 @@ const { Content, headings } = await render(entry);
 >
     <div class="mx-auto max-w-5xl px-6">
         <article>
-            <header class="py-6 pb-8 space-y-2 border-b border-border">
-                <a href="/blog" class="text-accent hover:underline">
+            <header class="py-6 pb-8 space-y-2 border-b border-base-300">
+                <a href="/blog" class="link link-primary hover:underline">
                     &larr; 一覧へ戻る
                 </a>
-                <p class="text-accent font-mono mt-6">
-                    {entry.data.date.toLocaleDateString("ja-JP")}
+                <p class="mt-6">
+                    <span
+                        class="badge badge-outline badge-sm font-mono text-primary"
+                    >
+                        {entry.data.date.toLocaleDateString("ja-JP")}
+                    </span>
                 </p>
                 <h1 class="text-2xl md:text-3xl font-bold">
                     {entry.data.title}
                 </h1>
-                <p class="text-lg text-secondary">{entry.data.description}</p>
+                <p class="text-lg text-base-content/80">
+                    {entry.data.description}
+                </p>
             </header>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 w-full py-8">
                 <div
