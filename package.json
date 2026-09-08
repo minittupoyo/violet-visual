@@ -28,6 +28,7 @@
         "react-dom": "^19.2.8",
         "satteri": "^0.10.5",
         "tailwindcss": "^4.3.3",
+        "takumi-js": "^2.13.7",
         "zod": "^4.5.4"
     },
     "allowScripts": {
