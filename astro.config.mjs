@@ -24,7 +24,7 @@ export default defineConfig({
         expressiveCode({
             themes: ["dracula", "catppuccin-latte"],
             styleOverrides: {
-                codeFontFamily: "'JetBrains Mono', monospace",
+                codeFontFamily: "'JetBrains Mono Variable', monospace",
             },
         }),
     ],
