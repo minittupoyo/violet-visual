@@ -19,6 +19,7 @@ export const GET: APIRoute = async ({ props }) => {
         await createOgImage({
             title: entry.data.title,
             description: entry.data.description,
+            date: entry.data.date
         }),
         { headers: { "Content-Type": "image/png" } },
     );

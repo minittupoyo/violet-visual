@@ -24,6 +24,7 @@
         "astro": "^7.3.1",
         "astro-expressive-code": "^0.44.2",
         "astro-icon": "^1.2.0",
+        "budoux": "^0.9.1",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
         "satteri": "^0.10.5",
