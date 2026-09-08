@@ -4,46 +4,55 @@ import ThemeSelect from "./ThemeSelect.astro";
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-12 border-t border-border">
+<footer class="mt-12 border-t border-base-300">
     <div
         class="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-10 sm:flex-row sm:items-end sm:justify-between"
     >
-        <div>
-            <a href="/" class="text-lg font-bold hover:text-accent">みにっつ</a>
-            <p class="mt-2 text-sm text-muted">
+        <aside>
+            <a href="/" class="text-lg font-bold hover:text-primary">
+                みにっつ
+            </a>
+            <p class="mt-2 text-sm text-base-content/60">
                 Web、Linux、音楽、ゲームについて書いています。
             </p>
-        </div>
+        </aside>
 
-        <div class="flex flex-col gap-5 sm:items-end">
-            <nav aria-label="フッターナビゲーション">
-                <ul class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-sm">
-                    <li><a href="/" class="text-accent hover:underline">Home</a></li>
-                    <li><a href="/about" class="text-accent hover:underline">About</a></li>
-                    <li><a href="/blog" class="text-accent hover:underline">Posts</a></li>
-                    <li><a href="/rss.xml" class="text-accent hover:underline">RSS</a></li>
-                    <li>
-                        <a
-                            href="https://github.com/minittupoyo"
-                            target="_blank"
-                            rel="noreferrer"
-                            class="text-accent hover:underline"
-                        >GitHub</a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://listenbrainz.org/user/minittupoyo/"
-                            target="_blank"
-                            rel="noreferrer"
-                            class="text-accent hover:underline"
-                        >ListenBrainz</a>
-                    </li>
-                </ul>
-            </nav>
+        <nav
+            aria-label="フッターナビゲーション"
+            class="flex flex-col gap-5 sm:items-end"
+        >
+            <ul class="flex flex-wrap items-center gap-1 font-mono text-sm">
+                <li><a href="/" class="btn btn-ghost btn-sm">Home</a></li>
+                <li><a href="/about" class="btn btn-ghost btn-sm">About</a></li>
+                <li><a href="/blog" class="btn btn-ghost btn-sm">Posts</a></li>
+                <li><a href="/rss.xml" class="btn btn-ghost btn-sm">RSS</a></li>
+                <li>
+                    <a
+                        href="https://github.com/minittupoyo"
+                        target="_blank"
+                        rel="noreferrer"
+                        class="btn btn-ghost btn-sm"
+                    >
+                        GitHub
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="https://listenbrainz.org/user/minittupoyo/"
+                        target="_blank"
+                        rel="noreferrer"
+                        class="btn btn-ghost btn-sm"
+                    >
+                        ListenBrainz
+                    </a>
+                </li>
+            </ul>
             <div class="flex items-center gap-3">
-                <p class="font-mono text-xs text-muted">© {year} minittupoyo</p>
+                <p class="font-mono text-xs text-base-content/60">
+                    © {year} minittupoyo
+                </p>
                 <ThemeSelect />
             </div>
-        </div>
+        </nav>
     </div>
 </footer>

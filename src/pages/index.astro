@@ -10,25 +10,26 @@ const posts = await getPosts();
 <Layout hideHeader={true}>
     <div class="mx-auto max-w-5xl px-6">
         <section class="py-12 space-y-2">
-            <p class="font-mono text-sm text-muted">minittupoyo</p>
+            <p class="font-mono text-sm text-base-content/60">minittupoyo</p>
             <h1 class="text-2xl md:text-4xl font-bold">みにっつ</h1>
-            <div
-                class="flex flex-row items-center flex-wrap gap-4 font-mono *:hover:underline"
-            >
-                <a href="/" class="text-accent">Home</a>
-                <a href="/about" class="text-accent">About</a>
-                <a href="/blog" class="text-accent">Posts</a>
+            <nav class="flex flex-row flex-wrap items-center gap-1 font-mono">
+                <a href="/" class="btn btn-ghost btn-sm">Home</a>
+                <a href="/about" class="btn btn-ghost btn-sm">About</a>
+                <a href="/blog" class="btn btn-ghost btn-sm">Posts</a>
                 <ThemeSelect />
-            </div>
+            </nav>
         </section>
         <section class="py-8 space-y-4">
             <h2 class="text-2xl md:text-3xl font-bold">About</h2>
-            <p class="text-lg text-secondary tracking-tight">
+            <p class="text-lg text-base-content/80 tracking-tight">
                 18歳のニートです。<br
                 />ちょっとだけプログラミングができます。<br
                 />Tauriでデスクトップアプリ作ったり、JSでサイト作ったり。
             </p>
-            <a href="/about" class="text-accent inline-flex space-x-2 group">
+            <a
+                href="/about"
+                class="link link-primary inline-flex space-x-2 group"
+            >
                 もっと詳しく <span class="group-hover:translate-x-1 transition">
                     &rarr;
                 </span>
@@ -36,35 +37,42 @@ const posts = await getPosts();
         </section>
         <section class="py-8 space-y-4">
             <h2 class="text-2xl md:text-3xl font-bold">Posts</h2>
-            <p class="text-lg text-secondary tracking-tight">
+            <p class="text-lg text-base-content/80 tracking-tight">
                 ブログです。ちょこちょこ書いてます。
             </p>
-            <div class="grid grid-cols-1 w-full divide-y divide-border">
+            <ul class="grid grid-cols-1 w-full divide-y divide-base-300">
                 {
                     posts.slice(0, 6).map((post) => (
-                        <a
-                            href={`/blog/${post.id}`}
-                            class="flex flex-row py-4 group"
-                        >
-                            <div class="mr-auto flex flex-col">
-                                <p class="text-accent text-sm font-mono">
-                                    {post.data.date.toLocaleDateString("ja-JP")}
-                                </p>
-                                <p class="text-2xl font-bold mt-2">
-                                    {post.data.title}
-                                </p>
-                                <p class="text-md text-secondary line-clamp-2">
-                                    {post.data.description}
-                                </p>
-                            </div>
-                            <span class="self-center opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">
-                                &rarr;
-                            </span>
-                        </a>
+                        <li>
+                            <a
+                                href={`/blog/${post.id}`}
+                                class="flex flex-row py-4 group"
+                            >
+                                <div class="mr-auto flex flex-col">
+                                    <span class="badge badge-outline badge-sm w-fit font-mono text-primary">
+                                        {post.data.date.toLocaleDateString(
+                                            "ja-JP",
+                                        )}
+                                    </span>
+                                    <p class="text-2xl font-bold mt-2">
+                                        {post.data.title}
+                                    </p>
+                                    <p class="text-md text-base-content/70 line-clamp-2">
+                                        {post.data.description}
+                                    </p>
+                                </div>
+                                <span class="self-center text-primary opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">
+                                    &rarr;
+                                </span>
+                            </a>
+                        </li>
                     ))
                 }
-            </div>
-            <a href="/blog" class="text-accent inline-flex space-x-2 group">
+            </ul>
+            <a
+                href="/blog"
+                class="link link-primary inline-flex space-x-2 group"
+            >
                 全部見る <span class="group-hover:translate-x-1 transition">
                     &rarr;
                 </span>

@@ -12,23 +12,18 @@ const styleMap: Record<number, string> = {
     2: "text-sm font-medium",
     3: "text-xs",
 };
-
-const indentMap: Record<number, string> = {
-    2: "pl-0",
-    3: "pl-2",
-};
 ---
 
 {
     filteredHeadings.length > 0 && (
         <nav>
-            <p class="text-lg font-bold">目次</p>
-            <ul class="space-y-2 mt-4">
+            <ul class="menu rounded-box w-full bg-base-200 p-2">
+                <li class="menu-title text-base-content">目次</li>
                 {filteredHeadings.map((h) => (
-                    <li class={`${indentMap[h.depth]}`}>
+                    <li>
                         <a
                             href={`#${h.slug}`}
-                            class={`${styleMap[h.depth]} hover:text-accent`}
+                            class={`${styleMap[h.depth]} ${h.depth === 3 ? "ms-2" : ""}`}
                         >
                             {h.text}
                         </a>
