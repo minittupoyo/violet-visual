@@ -180,7 +180,10 @@ const descriptionChunks = parser.parse(displayDescription);
 そして、分割された文字列の間に `<wbr>` を差し込みます。
 
 ```ts
-titleChunks.flatMap((chunk, i) => [chunk, React.createElement("wbr", { key: `t-wbr-${i}` })]);
+titleChunks.flatMap((chunk, i) => [
+    chunk,
+    React.createElement("wbr", { key: `t-wbr-${i}` }),
+]);
 ```
 
 `wbr` は「ここなら改行してもいいよ」という目印です。
@@ -210,7 +213,9 @@ OG画像の見た目はかなりシンプルです。
 タグは最大3件だけ表示しています。
 
 ```ts
-(post.data.tags || []).slice(0, 3).map((tag: string) => React.createElement("span", { key: tag }, `#${tag}`));
+(post.data.tags || [])
+    .slice(0, 3)
+    .map((tag: string) => React.createElement("span", { key: tag }, `#${tag}`));
 ```
 
 タグを全部出すと、記事によっては窮屈になります。
@@ -223,7 +228,11 @@ OG画像は情報量を詰め込みすぎるより、タイトルがちゃんと
 記事ページでは `Layout` にこう渡しています。
 
 ```astro
-<Layout title={`${post.data.title} | みにっつのブログ`} description={post.data.description} image={`/posts/${post.id}/og.png`} />
+<Layout
+    title={`${post.data.title} | みにっつのブログ`}
+    description={post.data.description}
+    image={`/posts/${post.id}/og.png`}
+/>
 ```
 
 `Layout.astro` 側では、その `image` を `og:image` と `twitter:image` に入れています。

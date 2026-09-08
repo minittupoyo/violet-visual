@@ -77,7 +77,10 @@ import { satteriBreaks } from "@minittupoyo/satteri-breaks";
 export default defineConfig({
     markdown: {
         processor: satteri({
-            mdastPlugins: [satteriBreaks, createSatteriLinkCardPlus({ cache: true })],
+            mdastPlugins: [
+                satteriBreaks,
+                createSatteriLinkCardPlus({ cache: true }),
+            ],
         }),
     },
 });

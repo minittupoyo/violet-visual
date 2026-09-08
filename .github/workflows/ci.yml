@@ -1,39 +1,39 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-  workflow_dispatch:
+    push:
+        branches:
+            - main
+    pull_request:
+    workflow_dispatch:
 
 permissions:
-  contents: read
+    contents: read
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ci-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  build:
-    name: Sync and build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    build:
+        name: Sync and build
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+            - name: Set up Bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
 
-      - name: Sync Astro types
-        run: bun run astro sync
+            - name: Sync Astro types
+              run: bun run astro sync
 
-      - name: Build production site
-        run: bun run build
+            - name: Build production site
+              run: bun run build

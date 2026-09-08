@@ -67,23 +67,35 @@ export default config({
             schema: {
                 title: fields.slug({ name: { label: "タイトル" } }),
                 description: fields.text({ label: "説明", multiline: false }),
-                date: fields.datetime({ label: "公開日", defaultValue: { kind: "now" } }),
+                date: fields.datetime({
+                    label: "公開日",
+                    defaultValue: { kind: "now" },
+                }),
                 emoji: fields.text({ label: "絵文字", defaultValue: "😎" }),
                 tags: fields.array(fields.text({ label: "タグ" }), {
                     label: "タグ一覧",
                     itemLabel: (props) => props.value,
                 }),
-                draft: fields.checkbox({ label: "下書き", defaultValue: false }),
+                draft: fields.checkbox({
+                    label: "下書き",
+                    defaultValue: false,
+                }),
                 content: fields.mdx({
                     label: "本文",
                     extension: "md",
                     options: {
                         image: {
-                            directory: "src/assets../../assets/images/blog/posts",
-                            publicPath: "@assets../../assets/images/blog/posts/",
+                            directory:
+                                "src/assets../../assets/images/blog/posts",
+                            publicPath:
+                                "@assets../../assets/images/blog/posts/",
                             transformFilename(originalFilename) {
-                                const date = new Date().toISOString().replace(/[:.]/g, "-");
-                                const random = Math.random().toString(36).substring(2, 7);
+                                const date = new Date()
+                                    .toISOString()
+                                    .replace(/[:.]/g, "-");
+                                const random = Math.random()
+                                    .toString(36)
+                                    .substring(2, 7);
                                 return `${date}-${random}-${originalFilename}`;
                             },
                         },

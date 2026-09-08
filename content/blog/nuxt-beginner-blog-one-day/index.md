@@ -72,7 +72,12 @@ const breadcrumb = ref<BreadcrumbItem[]>([
                 <template #headline>
                     <UBreadcrumb :items="breadcrumb" class="mb-4" />
                 </template>
-                <p v-if="posts" class="text-muted flex flex-row items-center gap-1">{{ posts.length }} 件の記事があります</p>
+                <p
+                    v-if="posts"
+                    class="text-muted flex flex-row items-center gap-1"
+                >
+                    {{ posts.length }} 件の記事があります
+                </p>
             </UPageHeader>
             <UPageBody>
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -81,21 +86,30 @@ const breadcrumb = ref<BreadcrumbItem[]>([
                         :href="post.path"
                         class="border-muted group hover:border-primary flex flex-row items-center justify-start gap-4 rounded-md border p-4 transition-all duration-150"
                     >
-                        <div class="flex h-12 w-12 items-center justify-center text-2xl">
+                        <div
+                            class="flex h-12 w-12 items-center justify-center text-2xl"
+                        >
                             {{ post.emoji }}
                         </div>
                         <div class="flex shrink flex-col items-start">
                             <p class="text-dimmed text-sm">
                                 {{
-                                    new Date(post.date).toLocaleDateString("ja-jp", {
-                                        year: "numeric",
-                                        month: "2-digit",
-                                        day: "2-digit",
-                                    })
+                                    new Date(post.date).toLocaleDateString(
+                                        "ja-jp",
+                                        {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                        },
+                                    )
                                 }}
                             </p>
-                            <h2 class="line-clamp-2 text-xl font-bold">{{ post.title }}</h2>
-                            <p class="text-muted line-clamp-1 text-base">{{ post.description }}</p>
+                            <h2 class="line-clamp-2 text-xl font-bold">
+                                {{ post.title }}
+                            </h2>
+                            <p class="text-muted line-clamp-1 text-base">
+                                {{ post.description }}
+                            </p>
                         </div>
                     </a>
                 </div>
@@ -135,7 +149,10 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
     return query;
 });
 
-defineOgImage("BlogOg.satori", { title: post.value?.title, description: post.value?.description });
+defineOgImage("BlogOg.satori", {
+    title: post.value?.title,
+    description: post.value?.description,
+});
 
 useSeoMeta({
     title: `${post.value?.title} | minittu`,
@@ -168,8 +185,12 @@ const breadcrumb = ref<BreadcrumbItem[]>([
                 <template #headline>
                     <UBreadcrumb :items="breadcrumb" class="mb-4" />
                 </template>
-                <p v-if="post" class="text-muted flex flex-row items-center gap-1">
-                    <Icon name="tabler:calendar-week" />{{ new Date(post?.date).toLocaleDateString("ja-jp") }}
+                <p
+                    v-if="post"
+                    class="text-muted flex flex-row items-center gap-1"
+                >
+                    <Icon name="tabler:calendar-week" />
+                    {{ new Date(post?.date).toLocaleDateString("ja-jp") }}
                 </p>
             </UPageHeader>
             <UPageBody>

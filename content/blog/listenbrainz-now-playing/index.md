@@ -84,17 +84,17 @@ GET /1/user/{username}/playing-now
 
 ```json
 {
-  "playing_now": true,
-  "track_metadata": {
-    "additional_info": {
-      "duration_ms": 257000,
-      "recording_msid": "0a035a06-5f9e-41c7-b80e-0e01f99a316d",
-      "submission_client": "Morphe"
-    },
-    "artist_name": "YOASOBI",
-    "release_name": "THE BOOK",
-    "track_name": "たぶん"
-  }
+    "playing_now": true,
+    "track_metadata": {
+        "additional_info": {
+            "duration_ms": 257000,
+            "recording_msid": "0a035a06-5f9e-41c7-b80e-0e01f99a316d",
+            "submission_client": "Morphe"
+        },
+        "artist_name": "YOASOBI",
+        "release_name": "THE BOOK",
+        "track_name": "たぶん"
+    }
 }
 ```
 
