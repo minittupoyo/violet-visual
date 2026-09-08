@@ -1,0 +1,50 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+    title="License"
+    description="みにっつブログの記事コンテンツとソースコードのライセンスについて。"
+>
+    <div class="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+        <header class="border-b border-base-300 pb-10 sm:pb-14">
+            <p class="font-mono text-sm text-base-content/60">License</p>
+            <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
+                ライセンス
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-base-content/80">
+                記事コンテンツと、このサイトのソースコードには異なるライセンスを適用しています。
+            </p>
+        </header>
+
+        <section class="grid gap-6 border-b border-base-300 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-base-content/60">Articles</h2>
+            <div class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80">
+                <p class="text-xl font-semibold tracking-tight text-base-content">CC BY 4.0</p>
+                <p>
+                    特記がない限り、このブログで公開しているオリジナルの記事は
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="license noreferrer" class="link link-primary">Creative Commons Attribution 4.0 International（CC BY 4.0）</a>
+                    のもとで利用できます。
+                </p>
+                <p>
+                    クレジットの表示、ライセンスへのリンク、変更した場合はその明示を行えば、営利・非営利を問わず共有・改変できます。
+                </p>
+                <p>
+                    記事内で引用している文章、画像・動画、埋め込みコンテンツ、商標など第三者に権利があるものは対象外です。それぞれの権利者が定める条件に従ってください。
+                </p>
+            </div>
+        </section>
+
+        <section class="grid gap-6 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
+            <h2 class="font-mono text-sm font-medium text-base-content/60">Source code</h2>
+            <div class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80">
+                <p class="text-xl font-semibold tracking-tight text-base-content">MIT License</p>
+                <p>
+                    このサイトのソースコードは
+                    <a href="https://opensource.org/license/mit" target="_blank" rel="license noreferrer" class="link link-primary">MIT License</a>
+                    のもとで公開しています。
+                </p>
+            </div>
+        </section>
+    </div>
+</Layout>

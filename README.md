@@ -1,4 +1,11 @@
-# Astro Starter Kit: Basics
+# みにっつブログ
+
+## License
+
+このサイトのソースコードは [MIT License](LICENSE) です。
+
+特記がない限り、`content/blog/` 内のオリジナル記事は
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) です。画像・動画・引用・埋め込みコンテンツなど、第三者に権利があるものは含まれません。
 
 ```sh
 bun create astro@latest -- --template basics
