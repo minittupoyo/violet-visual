@@ -30,7 +30,7 @@ export async function createOgImage({
     date
 }: OgImageOptions) {
     return render(
-        <div className="flex items-center w-full h-full">
+        <div className="bg-white flex items-center w-full h-full">
             <div className="mx-auto w-full max-w-5xl px-6">
                 {date && (
                     <p className="font-[JetBrains_Mono] text-lg text-blue-600 mb-4">{date.toLocaleDateString("ja-JP")}</p>
