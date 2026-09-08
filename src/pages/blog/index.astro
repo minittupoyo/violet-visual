@@ -12,12 +12,12 @@ const posts = await getPosts();
     <div class="mx-auto max-w-5xl px-6">
         <section class="py-8 space-y-4">
             <h1 class="text-2xl md:text-3xl font-bold">Posts</h1>
-            <p class="text-lg text-zinc-600 tracking-tight">
+            <p class="text-lg text-secondary tracking-tight">
                 ブログです。ちょこちょこ書いてます。
             </p>
         </section>
         <section class="pb-8">
-            <div class="grid grid-cols-1 w-full divide-y divide-zinc-200">
+            <div class="grid grid-cols-1 w-full divide-y divide-border">
                 {
                     posts.map((post) => (
                         <a
@@ -25,13 +25,13 @@ const posts = await getPosts();
                             class="flex flex-row py-4 group"
                         >
                             <div class="mr-auto flex flex-col">
-                                <p class="text-blue-600 text-sm font-mono">
+                                <p class="text-accent text-sm font-mono">
                                     {post.data.date.toLocaleDateString("ja-JP")}
                                 </p>
                                 <p class="text-2xl font-bold mt-2">
                                     {post.data.title}
                                 </p>
-                                <p class="text-md text-zinc-600 line-clamp-2">
+                                <p class="text-md text-secondary line-clamp-2">
                                     {post.data.description}
                                 </p>
                             </div>

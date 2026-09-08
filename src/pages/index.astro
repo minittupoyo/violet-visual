@@ -1,4 +1,5 @@
 ---
+import ThemeSelect from "@/components/ThemeSelect.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getPosts } from "@/lib/posts";
 import ListenBrainzRecent from "@/components/ListenBrainzRecent.astro";
@@ -9,24 +10,25 @@ const posts = await getPosts();
 <Layout hideHeader={true}>
     <div class="mx-auto max-w-5xl px-6">
         <section class="py-12 space-y-2">
-            <p class="font-mono text-sm text-zinc-500">minittupoyo</p>
+            <p class="font-mono text-sm text-muted">minittupoyo</p>
             <h1 class="text-2xl md:text-4xl font-bold">みにっつ</h1>
             <div
-                class="flex flex-row items-center gap-4 font-mono *:hover:underline"
+                class="flex flex-row items-center flex-wrap gap-4 font-mono *:hover:underline"
             >
-                <a href="/" class="text-blue-600">Home</a>
-                <a href="/about" class="text-blue-600">About</a>
-                <a href="/blog" class="text-blue-600">Posts</a>
+                <a href="/" class="text-accent">Home</a>
+                <a href="/about" class="text-accent">About</a>
+                <a href="/blog" class="text-accent">Posts</a>
+                <ThemeSelect />
             </div>
         </section>
         <section class="py-8 space-y-4">
             <h2 class="text-2xl md:text-3xl font-bold">About</h2>
-            <p class="text-lg text-zinc-600 tracking-tight">
+            <p class="text-lg text-secondary tracking-tight">
                 18歳のニートです。<br
                 />ちょっとだけプログラミングができます。<br
                 />Tauriでデスクトップアプリ作ったり、JSでサイト作ったり。
             </p>
-            <a href="/about" class="text-blue-600 inline-flex space-x-2 group">
+            <a href="/about" class="text-accent inline-flex space-x-2 group">
                 もっと詳しく <span class="group-hover:translate-x-1 transition">
                     &rarr;
                 </span>
@@ -34,10 +36,10 @@ const posts = await getPosts();
         </section>
         <section class="py-8 space-y-4">
             <h2 class="text-2xl md:text-3xl font-bold">Posts</h2>
-            <p class="text-lg text-zinc-600 tracking-tight">
+            <p class="text-lg text-secondary tracking-tight">
                 ブログです。ちょこちょこ書いてます。
             </p>
-            <div class="grid grid-cols-1 w-full divide-y divide-zinc-200">
+            <div class="grid grid-cols-1 w-full divide-y divide-border">
                 {
                     posts.slice(0, 6).map((post) => (
                         <a
@@ -45,13 +47,13 @@ const posts = await getPosts();
                             class="flex flex-row py-4 group"
                         >
                             <div class="mr-auto flex flex-col">
-                                <p class="text-blue-600 text-sm font-mono">
+                                <p class="text-accent text-sm font-mono">
                                     {post.data.date.toLocaleDateString("ja-JP")}
                                 </p>
                                 <p class="text-2xl font-bold mt-2">
                                     {post.data.title}
                                 </p>
-                                <p class="text-md text-zinc-600 line-clamp-2">
+                                <p class="text-md text-secondary line-clamp-2">
                                     {post.data.description}
                                 </p>
                             </div>
@@ -62,7 +64,7 @@ const posts = await getPosts();
                     ))
                 }
             </div>
-            <a href="/blog" class="text-blue-600 inline-flex space-x-2 group">
+            <a href="/blog" class="text-accent inline-flex space-x-2 group">
                 全部見る <span class="group-hover:translate-x-1 transition">
                     &rarr;
                 </span>

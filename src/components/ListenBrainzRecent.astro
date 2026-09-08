@@ -17,7 +17,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
     <div class="flex items-end justify-between gap-4">
         <div>
             <h2 class="text-2xl md:text-3xl font-bold">Listening</h2>
-            <p class="mt-2 text-lg text-zinc-600 tracking-tight">
+            <p class="mt-2 text-lg text-secondary tracking-tight">
                 最近聴いた曲です。
             </p>
         </div>
@@ -25,27 +25,27 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
             href={profileUrl}
             target="_blank"
             rel="noreferrer"
-            class="hidden text-sm text-blue-600 hover:underline sm:inline"
+            class="hidden text-sm text-accent hover:underline sm:inline"
         >
             ListenBrainz
         </a>
     </div>
 
     <div
-        class="hidden rounded-xl border border-blue-200 bg-blue-50/60 p-4"
+        class="hidden rounded-xl border border-accent-border bg-accent-subtle p-4"
         data-listenbrainz-now-playing
         aria-live="polite"
     >
         <div
-            class="mb-3 flex items-center gap-2 text-xs font-medium text-blue-700"
+            class="mb-3 flex items-center gap-2 text-xs font-medium text-accent"
         >
             <span class="relative flex size-2" aria-hidden="true">
                 <span
-                    class="absolute inline-flex size-full animate-ping rounded-full bg-blue-500 opacity-60"
+                    class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60"
                 >
                 </span>
                 <span
-                    class="relative inline-flex size-2 rounded-full bg-blue-600"
+                    class="relative inline-flex size-2 rounded-full bg-accent"
                 >
                 </span>
             </span>
@@ -59,7 +59,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
     </div>
 
     <p
-        class="text-sm text-zinc-500"
+        class="text-sm text-muted"
         data-listenbrainz-status
         aria-live="polite"
     >
@@ -67,7 +67,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
     </p>
 
     <ol
-        class="hidden divide-y divide-zinc-200 border-y border-zinc-200"
+        class="hidden divide-y divide-border border-y border-border"
         data-listenbrainz-list
         aria-label="最近聴いた曲"
     >
@@ -160,7 +160,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
         extraUrls: string[] = [],
     ) => {
         const cover = document.createElement("div");
-        cover.className = `flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 text-zinc-400`;
+        cover.className = `flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface text-muted`;
 
         const coverUrls = [
             ...new Set([...getCoverArtUrls(metadata), ...extraUrls]),
@@ -238,7 +238,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
 
     const createTrackText = (
         metadata: ListenBrainzTrackMetadata,
-        titleClass = "truncate text-sm font-medium text-zinc-900",
+        titleClass = "truncate text-sm font-medium text-foreground",
     ) => {
         const track = document.createElement("div");
         track.className = "min-w-0 flex-1";
@@ -248,7 +248,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
         title.textContent = metadata.track_name || "曲名不明";
 
         const details = document.createElement("p");
-        details.className = "mt-1 truncate text-xs text-zinc-500";
+        details.className = "mt-1 truncate text-xs text-muted";
         details.textContent =
             [metadata.artist_name, metadata.release_name]
                 .filter(Boolean)
@@ -265,7 +265,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
 
         const listenedAt = document.createElement("time");
         listenedAt.className =
-            "ml-auto shrink-0 text-xs text-zinc-400 tabular-nums";
+            "ml-auto shrink-0 text-xs text-muted tabular-nums";
         listenedAt.textContent = formatListenedAt(listen.listened_at);
 
         if (listen.listened_at) {
@@ -410,7 +410,7 @@ const profileUrl = `https://listenbrainz.org/user/${encodeURIComponent(username)
                         ),
                         createTrackText(
                             metadata,
-                            "truncate text-base font-semibold text-zinc-950 sm:text-lg",
+                            "truncate text-base font-semibold text-foreground sm:text-lg",
                         ),
                     );
 

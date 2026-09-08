@@ -23,6 +23,7 @@ export default defineConfig({
         ...(import.meta.env.PROD ? [] : [keystatic()]),
         expressiveCode({
             themes: ["dracula", "catppuccin-latte"],
+            themeCssSelector: (theme) => `[data-theme="${theme.type}"]`,
             styleOverrides: {
                 codeFontFamily: "'JetBrains Mono Variable', monospace",
             },

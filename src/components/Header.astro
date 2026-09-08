@@ -1,14 +1,19 @@
-<header class="sticky top-0 left-0 z-10 h-16 w-full bg-white">
+---
+import ThemeSelect from "./ThemeSelect.astro";
+---
+
+<header class="sticky top-0 left-0 z-10 min-h-16 w-full bg-background">
     <div
-        class="mx-auto max-w-5xl flex flex-row items-center justify-between px-6 h-full"
+        class="mx-auto max-w-5xl flex flex-row items-center justify-between px-6 py-3 gap-3 flex-wrap"
     >
         <a href="/" class="text-lg font-bold">みにっつ</a>
         <div
-            class="flex flex-row items-center gap-4 font-mono *:hover:underline"
+            class="flex flex-row items-center gap-3 flex-wrap font-mono *:hover:underline"
         >
-            <a href="/" class="text-blue-600">Home</a>
-            <a href="/about" class="text-blue-600">About</a>
-            <a href="/blog" class="text-blue-600">Posts</a>
+            <a href="/" class="text-accent">Home</a>
+            <a href="/about" class="text-accent">About</a>
+            <a href="/blog" class="text-accent">Posts</a>
+            <ThemeSelect />
         </div>
     </div>
 </header>

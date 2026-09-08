@@ -1,0 +1,50 @@
+<script is:inline>
+    (() => {
+        const key = "theme";
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        const normalize = (value) =>
+            value === "light" || value === "dark" ? value : "system";
+        let preference = "system";
+        try {
+            preference = normalize(localStorage.getItem(key));
+        } catch {
+            // The current page still supports switching when storage is unavailable.
+        }
+        const nextTheme = { system: "light", light: "dark", dark: "system" };
+        const labels = { system: "システム", light: "ライト", dark: "ダーク" };
+        const apply = () => {
+            document.documentElement.dataset.theme = preference === "system"
+                ? (media.matches ? "dark" : "light")
+                : preference;
+            document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+                const label = `現在のテーマ: ${labels[preference]}。${labels[nextTheme[preference]]}に切り替え`;
+                button.setAttribute("aria-label", label);
+                button.setAttribute("title", label);
+                button.querySelectorAll("[data-theme-icon]").forEach((icon) => {
+                    icon.toggleAttribute("hidden", icon.dataset.themeIcon !== preference);
+                });
+            });
+        };
+        apply();
+        document.addEventListener("DOMContentLoaded", apply);
+        document.addEventListener("click", (event) => {
+            if (!(event.target instanceof Element) ||
+                !event.target.closest("[data-theme-toggle]")) return;
+            preference = nextTheme[preference];
+            apply();
+            try {
+                localStorage.setItem(key, preference);
+            } catch {
+                // Keep the selection in memory for this page.
+            }
+        });
+        media.addEventListener("change", apply);
+        window.addEventListener("storage", (event) => {
+            if (event.key === key || event.key === null) {
+                preference = normalize(event.newValue);
+                apply();
+            }
+        });
+        window.addEventListener("pageshow", apply);
+    })();
+</script>

@@ -9,3 +9,85 @@
     --font-mono: "JetBrains Mono Variable", monospace;
     --default-mono-font-family: var(--font-mono);
 }
+
+/* Semantic color keys shared by utilities and Markdown content. */
+@theme inline {
+    --color-accent: var(--accent);
+    --color-accent-subtle: var(--accent-subtle);
+    --color-accent-border: var(--accent-border);
+    --color-foreground: var(--foreground);
+    --color-secondary: var(--secondary);
+    --color-muted: var(--muted);
+    --color-background: var(--background);
+    --color-surface: var(--surface);
+    --color-border: var(--border);
+}
+
+:root {
+    color-scheme: light;
+    --accent: var(--color-blue-600);
+    --accent-subtle: var(--color-blue-50);
+    --accent-border: var(--color-blue-200);
+    --foreground: var(--color-zinc-950);
+    --secondary: var(--color-zinc-600);
+    --muted: var(--color-zinc-500);
+    --background: #fff;
+    --surface: var(--color-zinc-100);
+    --border: var(--color-zinc-200);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --accent: var(--color-blue-400);
+    --accent-subtle: var(--color-blue-950);
+    --accent-border: var(--color-blue-800);
+    --foreground: var(--color-zinc-100);
+    --secondary: var(--color-zinc-300);
+    --muted: var(--color-zinc-400);
+    --background: var(--color-zinc-950);
+    --surface: var(--color-zinc-900);
+    --border: var(--color-zinc-800);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        color-scheme: dark;
+        --accent: var(--color-blue-400);
+        --accent-subtle: var(--color-blue-950);
+        --accent-border: var(--color-blue-800);
+        --foreground: var(--color-zinc-100);
+        --secondary: var(--color-zinc-300);
+        --muted: var(--color-zinc-400);
+        --background: var(--color-zinc-950);
+        --surface: var(--color-zinc-900);
+        --border: var(--color-zinc-800);
+    }
+}
+
+@layer base {
+    body {
+        background-color: var(--background);
+        color: var(--foreground);
+    }
+}
+
+@utility prose-theme {
+    --tw-prose-body: var(--secondary);
+    --tw-prose-headings: var(--foreground);
+    --tw-prose-lead: var(--secondary);
+    --tw-prose-links: var(--accent);
+    --tw-prose-bold: var(--foreground);
+    --tw-prose-counters: var(--muted);
+    --tw-prose-bullets: var(--muted);
+    --tw-prose-hr: var(--border);
+    --tw-prose-quotes: var(--foreground);
+    --tw-prose-quote-borders: var(--accent-border);
+    --tw-prose-captions: var(--muted);
+    --tw-prose-kbd: var(--foreground);
+    --tw-prose-kbd-shadows: 113 113 122;
+    --tw-prose-code: var(--foreground);
+    --tw-prose-pre-code: var(--foreground);
+    --tw-prose-pre-bg: var(--surface);
+    --tw-prose-th-borders: var(--border);
+    --tw-prose-td-borders: var(--border);
+}
