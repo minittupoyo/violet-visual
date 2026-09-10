@@ -24,21 +24,17 @@ const { Content, headings } = await render(entry);
     ogType="article"
     publishedTime={entry.data.date}
 >
-    <div class="mx-auto max-w-5xl px-6">
+    <div class="site-container">
         <article>
-            <header class="py-6 pb-8 space-y-2 border-b border-base-300">
-                <a href="/blog" class="link link-primary hover:underline">
+            <header class="article-header">
+                <a href="/blog" class="article-backlink">
                     &larr; 一覧へ戻る
                 </a>
-                <p class="mt-6">
-                    <span class="text-sm font-mono text-primary">
-                        {entry.data.date.toLocaleDateString("ja-JP")}
-                    </span>
-                </p>
-                <h1 class="text-2xl md:text-3xl font-bold">
-                    {entry.data.title}
-                </h1>
-                <p class="text-lg text-base-content/80">
+                <time class="post-meta mt-6" datetime={entry.data.date.toISOString()}>
+                    {entry.data.date.toLocaleDateString("ja-JP")}
+                </time>
+                <h1 class="page-title">{entry.data.title}</h1>
+                <p class="page-lead mt-3">
                     {entry.data.description}
                 </p>
             </header>

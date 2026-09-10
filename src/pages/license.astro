@@ -6,24 +6,22 @@ import Layout from "@/layouts/Layout.astro";
     title="License"
     description="みにっつブログの記事コンテンツとソースコードのライセンスについて。"
 >
-    <div class="mx-auto max-w-5xl px-6 py-10 sm:py-14">
-        <header class="border-b border-base-300 pb-10 sm:pb-14">
-            <p class="font-mono text-sm text-base-content/60">License</p>
-            <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
-                ライセンス
-            </h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-base-content/80">
+    <div class="site-container page-layout">
+        <header class="page-intro">
+            <p class="page-eyebrow">License</p>
+            <h1 class="page-title">ライセンス</h1>
+            <p class="page-lead">
                 記事コンテンツと、このサイトのソースコードには異なるライセンスを適用しています。
             </p>
         </header>
 
-        <section class="grid gap-6 border-b border-base-300 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
-            <h2 class="font-mono text-sm font-medium text-base-content/60">Articles</h2>
-            <div class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80">
-                <p class="text-xl font-semibold tracking-tight text-base-content">CC BY 4.0</p>
+        <section class="page-section page-section--divided">
+            <h2 class="section-label">Articles</h2>
+            <div class="section-copy">
+                <p class="section-heading">CC BY 4.0</p>
                 <p>
                     特記がない限り、このブログで公開しているオリジナルの記事は
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="license noreferrer" class="link link-primary">Creative Commons Attribution 4.0 International（CC BY 4.0）</a>
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="license noreferrer" class="text-link">Creative Commons Attribution 4.0 International（CC BY 4.0）</a>
                     のもとで利用できます。
                 </p>
                 <p>
@@ -35,13 +33,13 @@ import Layout from "@/layouts/Layout.astro";
             </div>
         </section>
 
-        <section class="grid gap-6 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14">
-            <h2 class="font-mono text-sm font-medium text-base-content/60">Source code</h2>
-            <div class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80">
-                <p class="text-xl font-semibold tracking-tight text-base-content">MIT License</p>
+        <section class="page-section">
+            <h2 class="section-label">Source code</h2>
+            <div class="section-copy">
+                <p class="section-heading">MIT License</p>
                 <p>
                     このサイトのソースコードは
-                    <a href="https://opensource.org/license/mit" target="_blank" rel="license noreferrer" class="link link-primary">MIT License</a>
+                    <a href="https://opensource.org/license/mit" target="_blank" rel="license noreferrer" class="text-link">MIT License</a>
                     のもとで公開しています。
                 </p>
             </div>

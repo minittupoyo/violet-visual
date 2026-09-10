@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getPosts } from "@/lib/posts";
+import PostList from "@/components/PostList.astro";
 
 const posts = await getPosts();
 ---
@@ -9,43 +10,17 @@ const posts = await getPosts();
     title="Posts"
     description="みにっつが書いたブログ記事の一覧です。Web、Linux、AI、自作PC、ゲーム、音楽などについて書いています。"
 >
-    <div class="mx-auto max-w-5xl px-6">
-        <section class="py-8 space-y-4">
-            <h1 class="text-2xl md:text-3xl font-bold">Posts</h1>
-            <p class="text-lg text-base-content/80 tracking-tight">
+    <div class="site-container page-layout">
+        <header class="page-intro">
+            <p class="page-eyebrow">Posts</p>
+            <h1 class="page-title">記事一覧</h1>
+            <p class="page-lead">
                 ブログです。ちょこちょこ書いてます。
             </p>
-        </section>
-        <section class="pb-8">
-            <ul class="grid grid-cols-1 w-full divide-y divide-base-300">
-                {
-                    posts.map((post) => (
-                        <li>
-                            <a
-                                href={`/blog/${post.id}`}
-                                class="flex flex-row py-4 group"
-                            >
-                                <div class="mr-auto flex flex-col">
-                                    <span class="text-sm w-fit font-mono text-primary">
-                                        {post.data.date.toLocaleDateString(
-                                            "ja-JP",
-                                        )}
-                                    </span>
-                                    <p class="text-2xl font-bold mt-2">
-                                        {post.data.title}
-                                    </p>
-                                    <p class="text-md text-base-content/70 line-clamp-2">
-                                        {post.data.description}
-                                    </p>
-                                </div>
-                                <span class="self-center text-primary opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">
-                                    &rarr;
-                                </span>
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
+        </header>
+        <section class="page-section">
+            <div class="section-label">All posts</div>
+            <PostList posts={posts} />
         </section>
     </div>
 </Layout>

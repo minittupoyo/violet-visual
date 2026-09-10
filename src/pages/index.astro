@@ -3,80 +3,45 @@ import ThemeSelect from "@/components/ThemeSelect.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getPosts } from "@/lib/posts";
 import ListenBrainzRecent from "@/components/ListenBrainzRecent.astro";
+import PostList from "@/components/PostList.astro";
 
 const posts = await getPosts();
 ---
 
 <Layout hideHeader={true}>
-    <div class="mx-auto max-w-5xl px-6">
-        <section class="py-12 space-y-2">
-            <p class="font-mono text-sm text-base-content/60">minittupoyo</p>
-            <h1 class="text-2xl md:text-4xl font-bold">みにっつ</h1>
-            <nav class="flex flex-row flex-wrap items-center gap-1 font-mono">
+    <div class="site-container page-layout">
+        <section class="page-intro">
+            <p class="page-eyebrow">minittupoyo</p>
+            <h1 class="page-title">みにっつ</h1>
+            <nav class="site-nav">
                 <a href="/" class="btn btn-ghost btn-sm">Home</a>
                 <a href="/about" class="btn btn-ghost btn-sm">About</a>
                 <a href="/blog" class="btn btn-ghost btn-sm">Posts</a>
                 <ThemeSelect />
             </nav>
         </section>
-        <section class="py-8 space-y-4">
-            <h2 class="text-2xl md:text-3xl font-bold">About</h2>
-            <p class="text-lg text-base-content/80 tracking-tight">
+        <section class="page-section page-section--divided">
+            <div class="section-label">About</div>
+            <div class="section-copy">
+                <h2 class="section-heading">ちょっとだけプログラミングができます。</h2>
+                <p>
                 18歳のニートです。<br
-                />ちょっとだけプログラミングができます。<br
                 />Tauriでデスクトップアプリ作ったり、JSでサイト作ったり。
-            </p>
-            <a
-                href="/about"
-                class="link link-primary inline-flex space-x-2 group"
-            >
-                もっと詳しく <span class="group-hover:translate-x-1 transition">
-                    &rarr;
-                </span>
-            </a>
+                </p>
+                <a href="/about" class="text-action">
+                    もっと詳しく <span class="text-action__arrow" aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
         </section>
-        <section class="py-8 space-y-4">
-            <h2 class="text-2xl md:text-3xl font-bold">Posts</h2>
-            <p class="text-lg text-base-content/80 tracking-tight">
-                ブログです。ちょこちょこ書いてます。
-            </p>
-            <ul class="grid grid-cols-1 w-full divide-y divide-base-300">
-                {
-                    posts.slice(0, 6).map((post) => (
-                        <li>
-                            <a
-                                href={`/blog/${post.id}`}
-                                class="flex flex-row py-4 group"
-                            >
-                                <div class="mr-auto flex flex-col">
-                                    <span class="text-sm w-fit font-mono text-primary">
-                                        {post.data.date.toLocaleDateString(
-                                            "ja-JP",
-                                        )}
-                                    </span>
-                                    <p class="text-2xl font-bold mt-2">
-                                        {post.data.title}
-                                    </p>
-                                    <p class="text-md text-base-content/70 line-clamp-2">
-                                        {post.data.description}
-                                    </p>
-                                </div>
-                                <span class="self-center text-primary opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">
-                                    &rarr;
-                                </span>
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
-            <a
-                href="/blog"
-                class="link link-primary inline-flex space-x-2 group"
-            >
-                全部見る <span class="group-hover:translate-x-1 transition">
-                    &rarr;
-                </span>
-            </a>
+        <section class="page-section page-section--divided">
+            <div class="section-label">Posts</div>
+            <div class="section-copy">
+                <h2 class="section-heading">ブログです。ちょこちょこ書いてます。</h2>
+                <PostList posts={posts.slice(0, 6)} />
+                <a href="/blog" class="text-action">
+                    全部見る <span class="text-action__arrow" aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
         </section>
         <ListenBrainzRecent username="minittupoyo" count={5} />
     </div>

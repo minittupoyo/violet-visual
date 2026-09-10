@@ -38,13 +38,11 @@ const links = [
     title="About"
     description="みにっつと、このブログについて。Web、Linux、自作PC、AI、音楽、ゲームなど、好きなものや書いていることをまとめています。"
 >
-    <div class="mx-auto max-w-5xl px-6 py-10 sm:py-14">
-        <header class="border-b border-base-300 pb-10 sm:pb-14">
-            <p class="font-mono text-sm text-base-content/60">About</p>
-            <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">
-                みにっつ / minittupoyo
-            </h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-base-content/80">
+    <div class="site-container page-layout">
+        <header class="page-intro">
+            <p class="page-eyebrow">About</p>
+            <h1 class="page-title">みにっつ / minittupoyo</h1>
+            <p class="page-lead">
                 18歳のニートです。ちょっとだけプログラミングができます。
                 Webサイトやデスクトップアプリを作ったり、Linuxをいじったり、
                 自作PCを触ったりしています。
@@ -52,14 +50,10 @@ const links = [
         </header>
 
         <section
-            class="grid gap-6 border-b border-base-300 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14"
+            class="page-section page-section--divided"
         >
-            <h2 class="font-mono text-sm font-medium text-base-content/60">
-                Me
-            </h2>
-            <div
-                class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80"
-            >
+            <h2 class="section-label">Me</h2>
+            <div class="section-copy">
                 <p>
                     AstroやVue、Tauriあたりを触ることが多いです。
                     最近はAIにコードを書かせることも多め。
@@ -72,17 +66,11 @@ const links = [
         </section>
 
         <section
-            class="grid gap-6 border-b border-base-300 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14"
+            class="page-section page-section--divided"
         >
-            <h2 class="font-mono text-sm font-medium text-base-content/60">
-                This blog
-            </h2>
-            <div
-                class="max-w-2xl space-y-5 text-base leading-8 text-base-content/80"
-            >
-                <p
-                    class="text-xl font-semibold tracking-tight text-base-content"
-                >
+            <h2 class="section-label">This blog</h2>
+            <div class="section-copy">
+                <p class="section-heading">
                     技術ブログというより、個人ブログ。
                 </p>
                 <p>
@@ -99,11 +87,9 @@ const links = [
         </section>
 
         <section
-            class="grid gap-6 border-b border-base-300 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14"
+            class="page-section page-section--divided"
         >
-            <h2 class="font-mono text-sm font-medium text-base-content/60">
-                Likes
-            </h2>
+            <h2 class="section-label">Likes</h2>
             <dl class="max-w-2xl divide-y divide-base-300">
                 {
                     likes.map((item) => (
@@ -119,11 +105,9 @@ const links = [
         </section>
 
         <section
-            class="grid gap-6 py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10 sm:py-14"
+            class="page-section"
         >
-            <h2 class="font-mono text-sm font-medium text-base-content/60">
-                Links
-            </h2>
+            <h2 class="section-label">Links</h2>
             <ul class="max-w-2xl divide-y divide-base-300">
                 {
                     links.map((link) => (
