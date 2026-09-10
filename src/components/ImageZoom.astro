@@ -15,7 +15,7 @@ import { Icon } from "astro-icon/components";
     <button class="image-zoom__close" type="button" aria-label="閉じる">
         <Icon name="tabler:x" aria-hidden="true" />
     </button>
-    <img class="image-zoom__image" alt="" />
+    <img class="image-zoom__image" alt="" draggable="false" />
 </dialog>
 
 <script>
@@ -48,6 +48,13 @@ import { Icon } from "astro-icon/components";
         let openScrollY = 0;
         let closeTimer: number | undefined;
         let scale = minScale;
+        let panX = 0;
+        let panY = 0;
+        let dragPointerId: number | undefined;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragOriginX = 0;
+        let dragOriginY = 0;
 
         const images = document.querySelectorAll<HTMLImageElement>(
             ".prose img:not(.image-zoom__image)",
@@ -65,11 +72,36 @@ import { Icon } from "astro-icon/components";
 
         const setScale = (nextScale: number) => {
             scale = Math.min(maxScale, Math.max(minScale, nextScale));
-            zoomedImage.style.transform = `scale(${scale})`;
+            if (scale === minScale) {
+                panX = 0;
+                panY = 0;
+            } else {
+                clampPan();
+            }
+            updateTransform();
             scaleOutput.value = `${Math.round(scale * 100)}%`;
             zoomOutButton.disabled = scale === minScale;
             zoomInButton.disabled = scale === maxScale;
             zoomedImage.classList.toggle("is-zoomed", scale > minScale);
+        };
+
+        const updateTransform = () => {
+            zoomedImage.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${scale})`;
+        };
+
+        const clampPan = () => {
+            const availableWidth = dialog.clientWidth - 32;
+            const availableHeight = dialog.clientHeight - 72;
+            const maxX = Math.max(
+                0,
+                (zoomedImage.offsetWidth * scale - availableWidth) / 2,
+            );
+            const maxY = Math.max(
+                0,
+                (zoomedImage.offsetHeight * scale - availableHeight) / 2,
+            );
+            panX = Math.min(maxX, Math.max(-maxX, panX));
+            panY = Math.min(maxY, Math.max(-maxY, panY));
         };
 
         const closeAfterScroll = (distance: number) => {
@@ -124,6 +156,32 @@ import { Icon } from "astro-icon/components";
         zoomOutButton.addEventListener("click", () =>
             setScale(scale - scaleStep),
         );
+        zoomedImage.addEventListener("pointerdown", (event) => {
+            if (scale === minScale) return;
+
+            dragPointerId = event.pointerId;
+            dragStartX = event.clientX;
+            dragStartY = event.clientY;
+            dragOriginX = panX;
+            dragOriginY = panY;
+            zoomedImage.setPointerCapture(event.pointerId);
+            zoomedImage.classList.add("is-dragging");
+        });
+        zoomedImage.addEventListener("pointermove", (event) => {
+            if (event.pointerId !== dragPointerId) return;
+
+            panX = dragOriginX + event.clientX - dragStartX;
+            panY = dragOriginY + event.clientY - dragStartY;
+            clampPan();
+            updateTransform();
+        });
+        const stopDragging = (event: PointerEvent) => {
+            if (event.pointerId !== dragPointerId) return;
+            dragPointerId = undefined;
+            zoomedImage.classList.remove("is-dragging");
+        };
+        zoomedImage.addEventListener("pointerup", stopDragging);
+        zoomedImage.addEventListener("pointercancel", stopDragging);
         dialog.addEventListener("click", (event) => {
             if (event.target === dialog) close();
         });
@@ -142,6 +200,7 @@ import { Icon } from "astro-icon/components";
         dialog.addEventListener(
             "touchstart",
             (event) => {
+                if (scale > minScale) return;
                 touchStartY = event.touches[0]?.clientY;
             },
             { passive: true },
@@ -149,6 +208,7 @@ import { Icon } from "astro-icon/components";
         dialog.addEventListener(
             "touchmove",
             (event) => {
+                if (scale > minScale) return;
                 const currentY = event.touches[0]?.clientY;
                 if (touchStartY !== undefined && currentY !== undefined) {
                     closeAfterScroll(currentY - touchStartY);
@@ -164,6 +224,8 @@ import { Icon } from "astro-icon/components";
         dialog.addEventListener("close", () => {
             window.clearTimeout(closeTimer);
             dialog.classList.remove("is-closing");
+            dragPointerId = undefined;
+            zoomedImage.classList.remove("is-dragging");
             setScale(minScale);
             zoomedImage.removeAttribute("src");
             zoomedImage.alt = "";
@@ -217,7 +279,13 @@ import { Icon } from "astro-icon/components";
     }
 
     .image-zoom__image.is-zoomed {
-        cursor: zoom-out;
+        cursor: grab;
+        touch-action: none;
+    }
+
+    .image-zoom__image.is-dragging {
+        cursor: grabbing;
+        transition: none;
     }
 
     .image-zoom__controls,
