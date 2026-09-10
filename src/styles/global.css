@@ -38,6 +38,132 @@
     }
 }
 
+@layer components {
+    .satteri-link-card__container {
+        margin-block: 2rem;
+        width: 100%;
+    }
+
+    .satteri-link-card__card {
+        display: flex;
+        min-height: 8rem;
+        flex-direction: column-reverse;
+        overflow: hidden;
+        border: 1px solid var(--color-base-300);
+        border-radius: var(--radius-box);
+        background: var(--color-base-100);
+        color: inherit;
+        text-decoration: none;
+        box-shadow: 0 1px 2px color-mix(in oklab, var(--color-base-content) 8%, transparent);
+        transition:
+            border-color 160ms ease,
+            box-shadow 160ms ease,
+            transform 160ms ease;
+    }
+
+    .satteri-link-card__card:hover {
+        border-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-base-300));
+        box-shadow: 0 10px 28px color-mix(in oklab, var(--color-primary) 13%, transparent);
+        transform: translateY(-2px);
+    }
+
+    .satteri-link-card__card:focus-visible {
+        outline: 3px solid color-mix(in oklab, var(--color-primary) 45%, transparent);
+        outline-offset: 3px;
+    }
+
+    .satteri-link-card__main {
+        display: flex;
+        min-width: 0;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.85rem;
+        padding: 1rem 1.1rem;
+    }
+
+    .satteri-link-card__title {
+        overflow: hidden;
+        color: var(--color-base-content);
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.45;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .satteri-link-card__description {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-top: 0.3rem;
+        color: color-mix(in oklab, var(--color-base-content) 66%, transparent);
+        font-size: 0.82rem;
+        line-height: 1.55;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .satteri-link-card__meta {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.45rem;
+    }
+
+    .satteri-link-card__favicon {
+        width: 0.9rem;
+        height: 0.9rem;
+        flex: none;
+        object-fit: contain;
+    }
+
+    .satteri-link-card__url {
+        overflow: hidden;
+        color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .satteri-link-card__thumbnail {
+        width: 100%;
+        flex: none;
+        border-bottom: 1px solid var(--color-base-300);
+    }
+
+    .satteri-link-card__image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1.91 / 1;
+        object-fit: cover;
+    }
+
+    @media (min-width: 40rem) {
+        .satteri-link-card__card {
+            height: 8rem;
+            flex-direction: row;
+        }
+
+        .satteri-link-card__thumbnail {
+            width: 15rem;
+            border-bottom: 0;
+            border-inline-start: 1px solid var(--color-base-300);
+        }
+
+        .satteri-link-card__image {
+            height: 100%;
+            aspect-ratio: auto;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .satteri-link-card__card {
+            transition: none;
+        }
+    }
+}
+
 /* Semantic colors for Markdown content, fed by the daisyUI theme. */
 @utility prose-theme {
     --tw-prose-body: color-mix(

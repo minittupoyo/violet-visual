@@ -1,0 +1,338 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<dialog class="image-zoom" aria-label="画像を拡大表示">
+    <div class="image-zoom__controls" aria-label="画像の表示倍率">
+        <button type="button" data-zoom-out aria-label="縮小">
+            <Icon name="tabler:zoom-out" aria-hidden="true" />
+        </button>
+        <output class="image-zoom__scale" aria-live="polite">100%</output>
+        <button type="button" data-zoom-in aria-label="拡大">
+            <Icon name="tabler:zoom-in" aria-hidden="true" />
+        </button>
+    </div>
+    <button class="image-zoom__close" type="button" aria-label="閉じる">
+        <Icon name="tabler:x" aria-hidden="true" />
+    </button>
+    <img class="image-zoom__image" alt="" />
+</dialog>
+
+<script>
+    const dialog = document.querySelector<HTMLDialogElement>(".image-zoom");
+    const zoomedImage =
+        dialog?.querySelector<HTMLImageElement>(".image-zoom__image");
+    const closeButton =
+        dialog?.querySelector<HTMLButtonElement>(".image-zoom__close");
+    const zoomInButton =
+        dialog?.querySelector<HTMLButtonElement>("[data-zoom-in]");
+    const zoomOutButton =
+        dialog?.querySelector<HTMLButtonElement>("[data-zoom-out]");
+    const scaleOutput =
+        dialog?.querySelector<HTMLOutputElement>(".image-zoom__scale");
+
+    if (
+        dialog &&
+        zoomedImage &&
+        closeButton &&
+        zoomInButton &&
+        zoomOutButton &&
+        scaleOutput
+    ) {
+        const closeScrollThreshold = 180;
+        const minScale = 1;
+        const maxScale = 4;
+        const scaleStep = 0.5;
+        let wheelDistance = 0;
+        let touchStartY: number | undefined;
+        let openScrollY = 0;
+        let closeTimer: number | undefined;
+        let scale = minScale;
+
+        const images = document.querySelectorAll<HTMLImageElement>(
+            ".prose img:not(.image-zoom__image)",
+        );
+
+        const open = (image: HTMLImageElement) => {
+            zoomedImage.src = image.currentSrc || image.src;
+            zoomedImage.alt = image.alt;
+            setScale(minScale);
+            wheelDistance = 0;
+            touchStartY = undefined;
+            openScrollY = window.scrollY;
+            dialog.showModal();
+        };
+
+        const setScale = (nextScale: number) => {
+            scale = Math.min(maxScale, Math.max(minScale, nextScale));
+            zoomedImage.style.transform = `scale(${scale})`;
+            scaleOutput.value = `${Math.round(scale * 100)}%`;
+            zoomOutButton.disabled = scale === minScale;
+            zoomInButton.disabled = scale === maxScale;
+            zoomedImage.classList.toggle("is-zoomed", scale > minScale);
+        };
+
+        const closeAfterScroll = (distance: number) => {
+            if (Math.abs(distance) >= closeScrollThreshold && dialog.open) {
+                close();
+            }
+        };
+
+        const close = () => {
+            if (!dialog.open || dialog.classList.contains("is-closing")) return;
+
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                dialog.close();
+                return;
+            }
+
+            dialog.classList.add("is-closing");
+            closeTimer = window.setTimeout(() => dialog.close(), 180);
+        };
+
+        for (const image of images) {
+            if (image.closest(".satteri-link-card__card")) continue;
+
+            image.dataset.zoomable = "";
+
+            if (!image.closest("a, button")) {
+                image.tabIndex = 0;
+                image.role = "button";
+                image.setAttribute(
+                    "aria-label",
+                    `${image.alt || "画像"}を拡大表示`,
+                );
+            }
+
+            image.addEventListener("click", (event) => {
+                event.preventDefault();
+                open(image);
+            });
+
+            image.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    open(image);
+                }
+            });
+        }
+
+        closeButton.addEventListener("click", close);
+        zoomInButton.addEventListener("click", () =>
+            setScale(scale + scaleStep),
+        );
+        zoomOutButton.addEventListener("click", () =>
+            setScale(scale - scaleStep),
+        );
+        dialog.addEventListener("click", (event) => {
+            if (event.target === dialog) close();
+        });
+        dialog.addEventListener("cancel", (event) => {
+            event.preventDefault();
+            close();
+        });
+        dialog.addEventListener(
+            "wheel",
+            (event) => {
+                wheelDistance += event.deltaY;
+                closeAfterScroll(wheelDistance);
+            },
+            { passive: true },
+        );
+        dialog.addEventListener(
+            "touchstart",
+            (event) => {
+                touchStartY = event.touches[0]?.clientY;
+            },
+            { passive: true },
+        );
+        dialog.addEventListener(
+            "touchmove",
+            (event) => {
+                const currentY = event.touches[0]?.clientY;
+                if (touchStartY !== undefined && currentY !== undefined) {
+                    closeAfterScroll(currentY - touchStartY);
+                }
+            },
+            { passive: true },
+        );
+        window.addEventListener(
+            "scroll",
+            () => closeAfterScroll(window.scrollY - openScrollY),
+            { passive: true },
+        );
+        dialog.addEventListener("close", () => {
+            window.clearTimeout(closeTimer);
+            dialog.classList.remove("is-closing");
+            setScale(minScale);
+            zoomedImage.removeAttribute("src");
+            zoomedImage.alt = "";
+        });
+    }
+</script>
+
+<style>
+    :global(.prose img[data-zoomable]) {
+        cursor: zoom-in;
+    }
+
+    :global(.prose img[data-zoomable]:focus-visible) {
+        outline: 3px solid
+            color-mix(in oklab, var(--color-primary) 60%, transparent);
+        outline-offset: 4px;
+    }
+
+    .image-zoom {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        margin: 0;
+        padding: 3.5rem 1rem 1rem;
+        border: 0;
+        background: transparent;
+        overflow: hidden;
+    }
+
+    .image-zoom[open] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-zoom::backdrop {
+        background: rgb(0 0 0 / 0.88);
+        backdrop-filter: blur(4px);
+    }
+
+    .image-zoom__image {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 100%;
+        object-fit: contain;
+        user-select: none;
+        transition: transform 160ms ease-out;
+    }
+
+    .image-zoom__image.is-zoomed {
+        cursor: zoom-out;
+    }
+
+    .image-zoom__controls,
+    .image-zoom__close {
+        position: absolute;
+        top: 0.75rem;
+        height: 2.5rem;
+        border: 1px solid rgb(255 255 255 / 0.25);
+        border-radius: 9999px;
+        background: rgb(0 0 0 / 0.55);
+        color: white;
+        z-index: 1;
+    }
+
+    .image-zoom__controls {
+        left: 50%;
+        display: flex;
+        align-items: center;
+        transform: translateX(-50%);
+        overflow: hidden;
+    }
+
+    .image-zoom__controls button,
+    .image-zoom__close {
+        display: grid;
+        width: 2.5rem;
+        height: 2.5rem;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font-size: 1.75rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .image-zoom__close {
+        right: 0.75rem;
+        border: 1px solid rgb(255 255 255 / 0.4);
+        background: rgb(0 0 0 / 0.72);
+        color: white;
+    }
+
+    .image-zoom__controls button:hover:not(:disabled),
+    .image-zoom__close:hover {
+        background: rgb(255 255 255 / 0.2);
+    }
+
+    .image-zoom__controls button:disabled {
+        opacity: 0.35;
+        cursor: default;
+    }
+
+    .image-zoom__controls svg,
+    .image-zoom__close svg {
+        width: 1.35rem;
+        height: 1.35rem;
+    }
+
+    .image-zoom__scale {
+        min-width: 3.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-align: center;
+    }
+
+    .image-zoom__controls button:focus-visible,
+    .image-zoom__close:focus-visible {
+        outline: 3px solid white;
+        outline-offset: -3px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .image-zoom[open] .image-zoom__image {
+            animation: image-zoom-in 160ms ease-out;
+        }
+
+        .image-zoom[open]::backdrop {
+            animation: image-zoom-backdrop-in 160ms ease-out;
+        }
+
+        .image-zoom.is-closing .image-zoom__image {
+            animation: image-zoom-out 160ms ease-in forwards;
+        }
+
+        .image-zoom.is-closing::backdrop {
+            animation: image-zoom-backdrop-out 160ms ease-in forwards;
+        }
+    }
+
+    @keyframes image-zoom-in {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+    }
+
+    @keyframes image-zoom-out {
+        to {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+    }
+
+    @keyframes image-zoom-backdrop-in {
+        from {
+            background: rgb(0 0 0 / 0);
+            backdrop-filter: blur(0);
+        }
+    }
+
+    @keyframes image-zoom-backdrop-out {
+        to {
+            background: rgb(0 0 0 / 0);
+            backdrop-filter: blur(0);
+        }
+    }
+</style>

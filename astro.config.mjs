@@ -7,6 +7,7 @@ import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
 import { satteri } from "@astrojs/markdown-satteri";
 import { satteriBreaks } from "@minittupoyo/satteri-breaks";
+import { createSatteriLinkCardPlus } from "@minittupoyo/satteri-link-card";
 
 import expressiveCode from "astro-expressive-code";
 
@@ -31,7 +32,14 @@ export default defineConfig({
     ],
     markdown: {
         processor: satteri({
-            mdastPlugins: [satteriBreaks],
+            mdastPlugins: [
+                satteriBreaks,
+                createSatteriLinkCardPlus({
+                    cache: true,
+                    shortenUrl: true,
+                    thumbnailPosition: "right",
+                }),
+            ],
         }),
     },
 });

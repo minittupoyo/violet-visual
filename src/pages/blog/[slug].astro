@@ -3,6 +3,7 @@ import { render } from "astro:content";
 import { getPosts } from "@/lib/posts";
 import Layout from "@/layouts/Layout.astro";
 import ToC from "@/components/ToC.astro";
+import ImageZoom from "@/components/ImageZoom.astro";
 
 export async function getStaticPaths() {
     const posts = await getPosts();
@@ -47,6 +48,7 @@ const { Content, headings } = await render(entry);
                 >
                     <Content />
                 </div>
+                <ImageZoom />
                 <div class="order-2 hidden md:block">
                     <div class="sticky top-24">
                         <ToC headings={headings} />
