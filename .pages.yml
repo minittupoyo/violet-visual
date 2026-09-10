@@ -8,7 +8,7 @@ content:
     - name: posts
       label: ブログ記事
       type: collection
-      path: content/blog/**
+      path: content/blog
       filename:
           template: "{parimary}/index.md"
           field: create
